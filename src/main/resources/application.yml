@@ -1,0 +1,38 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "schedule-reminder-system"
+  logging:
+    level:
+      ROOT: DEBUG
+      org.springframework.security: DEBUG
+
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 3600
+          must-revalidate: true
+
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/local
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: malireddy.666@gmail.com
+    password: "dtyo tild xndt lnkg"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+schedule:
+  fixedRate: 1000000

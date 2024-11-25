@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Schedule Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/login.css" th:href="@{/css/login.css}">
+</head>
+<body>
+
+<header>
+    <h1 class="text-center">Schedule Management System</h1>
+    <p class="text-center">Efficiently manage your schedules and reminders</p>
+</header>
+<section class="home" th:classappend="${shouldShow} ? 'home show' : 'home'">
+
+    <div class="login-container mt-5">
+        <h2>Login</h2>
+
+        <!-- Error Message Section -->
+        <div th:if="${shouldShow}" class="alert alert-danger" role="alert">
+            <span th:if="${errorMsg}">Invalid username or password.</span>
+            <span th:if="${logoutMsg}">You have been logged out!!</span>
+        </div>
+
+        <form th:action="@{/authenticateUser}" th:object="${user}" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" th:field="*{username}" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" th:field="*{password}" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <div class="text-center mt-3">
+            <a href="#" class="text-muted">Forgot Password?</a>
+            <br>
+            <!-- Sign Up Link -->
+            <a href="/signup" class="text-primary">Don't have an account? Sign Up</a>
+        </div>
+    </div>
+
+    <footer class="text-center mt-5">
+        <p>&copy; 2024 Schedule Management System. All rights reserved.</p>
+    </footer>
+</section>
+</body>
+</html>

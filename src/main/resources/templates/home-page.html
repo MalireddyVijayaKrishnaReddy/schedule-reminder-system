@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/homepage.css" th:href="@{/css/homepage.css}">
+    <script type="text/javascript" th:src="@{/js/homepage.js}" defer></script>
+</head>
+<body>
+
+<header class="bg-secondary text-white text-center py-4">
+    <h1>Schedule Management System</h1>
+    <p>Efficiently manage your schedules and reminders</p>
+</header>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-warning">
+    <div class="container">
+        <a class="navbar-brand" href="#">Schedule Management</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#categories">Categories</a></li>
+                <li class="nav-item"><a class="nav-link" href="#tasks">Tasks</a></li>
+                <li class="nav-item"><a class="nav-link" href="#reminders">Reminders</a></li>
+                <li class="nav-item"><a class="nav-link" href="#account">Account</a></li>
+            </ul>
+            <form th:action="@{/logout}" method="post" class="d-inline ml-auto">
+                <button type="submit" class="btn btn-danger my-2 my-sm-0">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-4">
+    <section id="dashboard" class="bg-light border rounded p-4 mb-4">
+        <h2 class="section-title">Dashboard</h2>
+        <p>Welcome to the Schedule Management System! Here, you can manage your tasks and reminders efficiently. Use the navigation above to access different sections.</p>
+    </section>
+
+    <section id="categories" class="bg-light border rounded p-4 mb-4">
+        <h2 class="section-title">Categories</h2>
+        <ul class="list-group mb-3">
+            <li th:each="category : ${categories}" class="list-group-item d-flex justify-content-between align-items-center">
+                <span th:text="${category}">Task Name</span>
+                <form th:action="@{/deleteCategory/{categoryName}(categoryName=${category})}" method="POST">
+                    <!-- Set type to submit -->
+                    <button class="btn btn-danger btn-sm" type="submit" data-toggle="tooltip" title="Delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </form>
+            </li>
+        </ul>
+        <div class="form-group">
+
+            <form th:action="@{/addCategory}" th:object="${category}" method="POST">
+                <label for="new-category">Add New Category:</label>
+                <input type="text" class="form-control" id="new-category" placeholder="Enter category name" th:field="*{category_name}" required/>
+                <div class="text-danger" th:class="${categoryExists} ? 'd-block' : 'd-none'">Category Already Exist!!!</div>
+                <button id ="add-category" class="btn btn-primary mt-2">Add Category</button>
+            </form>
+           <!-- <button id ="add-category" class="btn btn-primary mt-2">Add Category</button>-->
+        </div>
+    </section>
+
+    <section id="tasks" class="bg-light border rounded p-4 mb-4">
+        <h2 class="section-title">ADD Tasks</h2>
+        <form th:action="@{/addTask}" th:object="${reminder}" method="POST">
+        <div class="form-group">
+            <label for="task-category">Category:</label>
+            <select th:field="*{category_name}" class="form-control" id="task-category">
+
+                <option th:each="category : ${categories}"
+                        th:value="${category}"
+                        th:text="${category}"></option>
+            </select>
+            <label for="task-name">Task Name:</label>
+            <input required th:field="*{task_name}" type="text" class="form-control" id="task-name" placeholder="Enter task name" />
+            <label for="task-date">Due Date:</label>
+            <input required type="datetime-local" th:field="*{reminder_datetime}" class="form-control" id="task-date" />
+            <label for="communication-channel">Communication Channel:</label>
+            <select th:field="*{reminder_medium}" class="form-control" id="communication-channel" required>
+
+                <option value="SMS">SMS</option>
+                <option value="EMAIL">EMAIL</option>
+                <option value="SMS+EMAIL">SMS+EMAIL</option>
+            </select>
+
+            <label for="reminder-options">Remind Me:</label>
+            <select th:field="*{remind_me}" class="form-control" id="reminder-options" required>
+
+            </select>
+            <label for="task-details">Task Details:</label>
+            <textarea th:field="*{note}" class="form-control" id="task-details" th:placeholder="${note == null ? 'Enter task details' : 'Enter task details'}" placeholder="Enter task details">asd</textarea>
+            <button type="submit" class="btn btn-primary mt-2">Add Task</button>
+        </div>
+        </form>
+    </section>
+
+    <section id="reminders" class="bg-light border rounded p-4 mb-4">
+        <h2 class="section-title">Reminders</h2>
+
+        <!-- Sorting Dropdown -->
+        <label for="sortCriteria" class="form-label">Sort by:</label>
+        <select id="sortCriteria" class="form-select mb-3" onchange="sortList()">
+            <option value="category">Category</option>
+            <option value="task">Task Name</option>
+            <option value="duedate">Due Date</option>
+        </select>
+
+        <div>
+        <!-- Search Box -->
+        <label for="searchBox" class="form-label">Search:</label>
+        <input type="text" id="searchBox" class="form-control mb-3" placeholder="Search by category or task" oninput="filterList()">
+        </div>
+        <ul id="remindersList" class="list-group mb-3">
+            <li th:each="reminder : ${reminders}"  class="list-group-item task-list d-flex justify-content-between align-items-center reminder-item">
+                <div>
+                <span th:text="${reminder.category_name} + ' - ' + ${reminder.task_name} + ' - Due: ' + ${#temporals.format(reminder.reminder_datetime, 'dd MMM yyyy HH:mm')}">
+                    Task Name
+                </span>
+                    <br>
+                    <span th:text="'Note: ' + (${reminder.getNote()} != null ? ${reminder.getNote()} : 'N/A')">note</span>
+                </div>
+                <form th:action="@{/deleteReminder/{id}(id=${reminder.reminder_id})}" method="POST">
+                    <button class="btn btn-danger btn-sm" type="submit" data-toggle="tooltip" title="Delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </section>
+
+
+
+
+    <section id="account" class="bg-light border rounded p-4 mb-4">
+        <h2 class="section-title">User Account</h2>
+        <p>Manage your account settings and preferences here.</p>
+        <div class="form-group">
+            <label for="user-name">Name:</label>
+            <input type="text" class="form-control" id="user-name" placeholder="Enter your name" />
+            <label for="user-email">Email:</label>
+            <input type="email" class="form-control" id="user-email" placeholder="Enter your email" />
+            <button class="btn btn-primary mt-2">Update Account</button>
+        </div>
+    </section>
+</div>
+
+<footer class="bg-secondary text-white text-center py-3">
+    <p>&copy; 2024 Schedule Management System. All rights reserved.</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

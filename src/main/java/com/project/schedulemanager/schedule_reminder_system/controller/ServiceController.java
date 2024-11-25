@@ -4,6 +4,7 @@ import com.project.schedulemanager.schedule_reminder_system.dao.UserDao;
 import com.project.schedulemanager.schedule_reminder_system.entity.Category;
 import com.project.schedulemanager.schedule_reminder_system.entity.Reminder;
 import com.project.schedulemanager.schedule_reminder_system.service.CategoryService;
+import com.project.schedulemanager.schedule_reminder_system.service.DemographicsService;
 import com.project.schedulemanager.schedule_reminder_system.service.ReminderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,9 @@ public class ServiceController {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    DemographicsService demographicsService;
+
     @GetMapping("/")
     public String homePage(Model model) {
         List<String> categoryNames= categoryService.getAllCategories();
@@ -34,6 +38,7 @@ public class ServiceController {
         model.addAttribute("category", new Category());
         model.addAttribute("categories", categoryNames);
         model.addAttribute("reminders", reminders);
+        model.addAttribute("demographics",demographicsService.getDemographics());
 
         System.out.println(categoryService.getAllCategories());
 

@@ -142,13 +142,17 @@
     <section id="account" class="bg-light border rounded p-4 mb-4">
         <h2 class="section-title">User Account</h2>
         <p>Manage your account settings and preferences here.</p>
+        <form th:action="@{/updateDemographics}" th:object="${demographics}" method="POST">
         <div class="form-group">
-            <label for="user-name">Name:</label>
-            <input type="text" class="form-control" id="user-name" placeholder="Enter your name" />
-            <label for="user-email">Email:</label>
-            <input type="email" class="form-control" id="user-email" placeholder="Enter your email" />
-            <button class="btn btn-primary mt-2">Update Account</button>
+            <label for="first_name">First Name:</label>
+            <input type="text" class="form-control" id="first_name" th:placeholder="*{firstname}"  th:value="*{firstname}"/>
+            <label for="last_name">Last Name:</label>
+            <input type="text" class="form-control" id="last_name" th:placeholder="*{lastname}"  th:value="*{lastname}" />
+            <label for="user-phone">Phone:</label>
+            <input type="text" minlength="10" maxlength="10" class="form-control" id="user-phone" th:placeholder="*{phone_number}" th:value="*{phone_number}"  />
+            <button type="submit"  class="btn btn-primary mt-2">Update Account</button>
         </div>
+        </form>
     </section>
 </div>
 

@@ -145,11 +145,16 @@
         <form th:action="@{/updateDemographics}" th:object="${demographics}" method="POST">
         <div class="form-group">
             <label for="first_name">First Name:</label>
-            <input type="text" class="form-control" id="first_name" th:placeholder="*{firstname}"  th:value="*{firstname}"/>
+            <input type="text" class="form-control" id="first_name" th:placeholder="*{firstname}"  th:value="*{firstname}" th:field="*{firstname}"/>
             <label for="last_name">Last Name:</label>
-            <input type="text" class="form-control" id="last_name" th:placeholder="*{lastname}"  th:value="*{lastname}" />
+            <input type="text" class="form-control" id="last_name" th:placeholder="*{lastname}"  th:value="*{lastname}" th:field="*{lastname}" />
             <label for="user-phone">Phone:</label>
-            <input type="text" minlength="10" maxlength="10" class="form-control" id="user-phone" th:placeholder="*{phone_number}" th:value="*{phone_number}"  />
+            <input type="text" minlength="10" maxlength="10" class="form-control" id="user-phone" th:placeholder="*{phone_number}" th:value="*{phone_number}"  th:field="*{phone_number}"/>
+            <label for="user_name" class="d-none">User Name:</label>
+            <input type="text"  class="form-control d-none" id="user_name" th:placeholder="*{username}"  th:value="*{username}" th:field="*{username}"/>
+            <label class="d-none">
+                <input th:field="*{user_id}" th:value="*{user_id}"/>
+            </label>
             <button type="submit"  class="btn btn-primary mt-2">Update Account</button>
         </div>
         </form>

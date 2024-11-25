@@ -19,4 +19,7 @@ public class DemoGraphicsDao {
          query.setParameter("username", username);
          return query.getSingleResult();
     }
+    public void update(Demographics demographics) {
+        entityManager.merge(demographics);
+    }
 }

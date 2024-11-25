@@ -2,6 +2,7 @@ package com.project.schedulemanager.schedule_reminder_system.controller;
 
 import com.project.schedulemanager.schedule_reminder_system.dao.UserDao;
 import com.project.schedulemanager.schedule_reminder_system.entity.Category;
+import com.project.schedulemanager.schedule_reminder_system.entity.Demographics;
 import com.project.schedulemanager.schedule_reminder_system.entity.Reminder;
 import com.project.schedulemanager.schedule_reminder_system.service.CategoryService;
 import com.project.schedulemanager.schedule_reminder_system.service.DemographicsService;
@@ -73,5 +74,11 @@ public class ServiceController {
         return "redirect:/";
     }
 
+    @PostMapping("/updateDemographics")
+    public String updateDemographics(@ModelAttribute("demographics") Demographics demographics, Model model ) {
+        System.out.println(demographics);
+      demographicsService.updateDemographics(demographics);
+        return "redirect:/";
+    }
 
 }
